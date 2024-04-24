@@ -6,7 +6,6 @@ require('dotenv').config();
 
 
 const app = express();
-
 const PORT = process.env.PORT || 3001;
 
 // Middleware
@@ -23,24 +22,12 @@ app.use(bodyParser.json());
 
 // app.use(cors(corsOptions));
 
-// app.use(cors());
-
-// Configure CORS with dynamic origin if needed
-const corsOptions = {
-    origin: (origin, callback) => {
-      const allowedOrigins = ['https://www.thermalvisionecology.co.uk', 'https://ecology-backend-g5phtd16c-jayteebees-projects.vercel.app'];
-      if (!origin || allowedOrigins.indexOf(origin) !== -1) {
-        callback(null, true)
-      } else {
-        callback(new Error('CORS not allowed from this origin'));
-      }
-    },
-    methods: ['POST', 'OPTIONS'],  // Explicitly handle OPTIONS for preflight
-    allowedHeaders: ['Content-Type', 'Authorization'],
-    credentials: true,
-};
-
-app.use(cors(corsOptions));
+app.use(cors(
+    {
+        origin: "*" //['http://localhost:3000']
+    }
+));
+  
 
 
 const EMAIL = process.env.EMAIL;
@@ -84,7 +71,7 @@ app.post('/send-email', (req, res) => {
     });
   });
   
-  app.options('*', cors(corsOptions));
+
 // Start the server
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
