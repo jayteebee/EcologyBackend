@@ -14,13 +14,14 @@ app.use(bodyParser.json());
 
 // Configure CORS with specific options
 const corsOptions = {
-    origin: 'https://www.thermalvisionecology.co.uk', // Ensure this matches the exact URL of your frontend
+    origin:  ['https://www.thermalvisionecology.co.uk', "localhost:3000"], // Ensure this matches the exact URL of your frontend
     methods: 'POST', // You can also use ['GET', 'POST'] if you handle multiple types of requests
-    allowedHeaders: ['Content-Type', 'Authorization'],
+    allowedHeaders: ['Content-Type', 'Authorization', "Access-Control-Allow-Origin"],
     credentials: true, // If your frontend needs to send cookies or authorization headers
   };
   
-  app.use(cors(corsOptions));
+//   app.use(cors(corsOptions));
+app.use(cors());
   
 
 
@@ -33,9 +34,9 @@ const transporter = nodemailer.createTransport({
   service: 'Gmail',
   auth: {
     // user: process.env.EMAIL,
-    user: EMAIL,
+    user: "jethro@thermalvisionresearch.co.uk",
     // pass: process.env.PASSWORD, 
-    pass: PASSWORD
+    pass: "ThermalVR2k4"
   },
 });
 
