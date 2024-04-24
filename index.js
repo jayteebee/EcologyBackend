@@ -13,11 +13,15 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 // Configure CORS with specific options
-app.use(cors({
-  origin: ['https://www.thermalvisionecology.co.uk', "https://www.thermalvisionecology.co.uk/api", "http://localhost:3000", "thermalvisionecology.co.uk", "https://ecology-backend-g5phtd16c-jayteebees-projects.vercel.app"], // Replace with your frontend URL
-  methods: ['POST'], // Specify allowed HTTP methods
-  allowedHeaders: ['Content-Type', 'Authorization'], // Specify allowed headers
-}));
+const corsOptions = {
+    origin: 'https://www.thermalvisionecology.co.uk', // Ensure this matches the exact URL of your frontend
+    methods: 'POST', // You can also use ['GET', 'POST'] if you handle multiple types of requests
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true, // If your frontend needs to send cookies or authorization headers
+  };
+  
+  app.use(cors(corsOptions));
+  
 
 
 const EMAIL = process.env.EMAIL;
