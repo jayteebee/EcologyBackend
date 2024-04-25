@@ -1,20 +1,3 @@
-// // Docs on event and context https://docs.netlify.com/functions/build/#code-your-function-2
-// const handler = async (event) => {
-//   try {
-//     const subject = event.queryStringParameters.name || 'World'
-//     return {
-//       statusCode: 200,
-//       body: JSON.stringify({ message: `Hello ${subject}` }),
-//       // // more keys you can return:
-//       // headers: { "headerName": "headerValue", ... },
-//       // isBase64Encoded: true,
-//     }
-//   } catch (error) {
-//     return { statusCode: 500, body: error.toString() }
-//   }
-// }
-
-// module.exports = { handler }
 
 
 // Import dependencies
@@ -56,29 +39,47 @@ exports.handler = async (event) => {
       const data = JSON.parse(event.body);
       const { fullName, email, dates, cameras, project, phoneNumber } = data;
 
-      // Mail options
-      const mailOptions = {
+      // Mail options for the administrator
+      const mailOptionsAdmin = {
         from: email,
         to: 'jethro@thermalvisionresearch.co.uk',
         subject: 'Ecology Kit Enquiry',
-        text: `
-          Full Name: ${fullName}
-          Email: ${email}
-          Phone Number: ${phoneNumber}
-          Dates Needed: ${dates}
-          Cameras Needed: ${cameras}
-          Project Details: ${project}
-        `,
+        html: `
+          <p>Full Name: ${fullName}</p>
+          <p>Email: ${email}</p>
+          <p>Phone Number: ${phoneNumber}</p>
+          <p>Dates Needed: ${dates}</p>
+          <p>Cameras Needed: ${cameras}</p>
+          <p>Project Details: ${project}</p>
+        `, // Using HTML for richer formatting
       };
 
-      // Send email
+      // Mail options for the user as a thank-you response
+      const mailOptionsUser = {
+        from: process.env.EMAIL,
+        to: email,
+        subject: 'Thank You for Your Enquiry',
+        html: `
+          <p>Hello ${fullName},</p>
+          <p>Thank you for reaching out to us about your project. We will review your enquiry and get back to you soon.</p>
+          <p>Kind Regards,<br>Jethro Block<br>Ecology Consultant<br>07948 725 229<br>www.thermalvisionecology.co.uk<br>2530 The Quadrant, Aztec West, Bristol BS32 4AQ</p>
+          <img src="https://i.ibb.co/GMXjMsD/TVElogo.png" alt="TVElogo" border="0" height="70px">
+        ` // Include your email signature as an image or HTML here
+      };
+
+      // Send email to the administrator
       await new Promise((resolve, reject) => {
-        transporter.sendMail(mailOptions, (error, info) => {
-          if (error) {
-            reject(error);
-          } else {
-            resolve(info);
-          }
+        transporter.sendMail(mailOptionsAdmin, (error, info) => {
+          if (error) reject(error);
+          else resolve(info);
+        });
+      });
+
+      // Send thank-you email to the user
+      await new Promise((resolve, reject) => {
+        transporter.sendMail(mailOptionsUser, (error, info) => {
+          if (error) reject(error);
+          else resolve(info);
         });
       });
 
