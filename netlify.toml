@@ -8,8 +8,8 @@ autoLaunch = true  # Automatically open the browser
 
 [build]
   # No build command needed if you only have serverless functions
-  command = "# No build command"
-  publish = "# No publish directory"
+  command = ""
+  publish = ""
 
 [functions]
   # Specify the directory where your Netlify functions are located
