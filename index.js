@@ -13,21 +13,21 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 //Configure CORS with specific options
-// const corsOptions = {
-//     origin: 'https://www.thermalvisionecology.co.uk', // Include other necessary domains
-//     methods: ['POST', 'OPTIONS'],  // Include OPTIONS to handle preflight
-//     allowedHeaders: ['Content-Type', 'Authorization', "Access-Control-Allow-Origin"],
-//     credentials: true,
-// };
+const corsOptions = {
+    origin: 'https://www.thermalvisionecology.co.uk', // Include other necessary domains
+    methods: ['POST', 'OPTIONS'],  // Include OPTIONS to handle preflight
+    allowedHeaders: ['Content-Type', 'Authorization', "Access-Control-Allow-Origin"],
+    credentials: true,
+};
 
-// app.use(cors(corsOptions));
+app.use(cors(corsOptions));
 
-app.use(cors(
-    {
-        origin: "*", //['http://localhost:3000'],
-        methods: ['POST', 'OPTIONS'],  // Include OPTIONS to handle preflight
-    }
-));
+// app.use(cors(
+//     {
+//         origin: "*", //['http://localhost:3000'],
+//         methods: ['POST', 'OPTIONS'],  // Include OPTIONS to handle preflight
+//     }
+// ));
   
 
 
