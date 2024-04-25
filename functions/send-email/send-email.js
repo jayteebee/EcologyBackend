@@ -37,7 +37,7 @@ exports.handler = async (event) => {
     try {
       // Parse the request body
       const data = JSON.parse(event.body);
-      const { fullName, email, dates, cameras, project, phoneNumber } = data;
+      const { firstName, lastName, companyName, email, dates, cameras, project, phoneNumber, submittedAt } = data;
 
       // Mail options for the administrator
       const mailOptionsAdmin = {
@@ -45,7 +45,9 @@ exports.handler = async (event) => {
         to: 'jethro@thermalvisionresearch.co.uk',
         subject: 'Ecology Kit Enquiry',
         html: `
-          <p>Full Name: ${fullName}</p>
+          <p>Full Name: ${firstName}</p>
+          <p>Last Name: ${lastName}</p>
+          <p>Company Name: ${companyName}</p>
           <p>Email: ${email}</p>
           <p>Phone Number: ${phoneNumber}</p>
           <p>Dates Needed: ${dates}</p>
@@ -60,7 +62,7 @@ exports.handler = async (event) => {
         to: email,
         subject: 'Thank You for Your Enquiry',
         html: `
-          <p>Hello ${fullName},</p>
+          <p>Hello ${firstName},</p>
           <p>Thank you for reaching out to us about your project. We will review your enquiry and get back to you soon.</p>
           <p>Kind Regards,<br>Jethro Block<br>Ecology Consultant<br>07948 725 229<br>www.thermalvisionecology.co.uk<br>2530 The Quadrant, Aztec West, Bristol BS32 4AQ</p>
           <img src="https://i.ibb.co/GMXjMsD/TVElogo.png" alt="TVElogo" border="0" height="70px">
@@ -82,6 +84,18 @@ exports.handler = async (event) => {
           else resolve(info);
         });
       });
+
+ // Additional POST request to Zapier
+ const zapierResponse = await fetch('https://hooks.zapier.com/hooks/catch/18365503/37ud00h/', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify(data)
+});
+
+if (!zapierResponse.ok) throw new Error('Failed to send data to Zapier');
+
 
       // Return success response with CORS headers
       return {
